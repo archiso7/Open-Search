@@ -1,4 +1,3 @@
-import urllib.request as urlr
 from bs4 import BeautifulSoup
 from lst import containlst
 from requests import get
@@ -9,7 +8,7 @@ headers = {
 
 def search1(url, search):
         toRead = get(url, headers=headers)
-        content = str(toRead.read())[1:]
+        content = str(BeautifulSoup(toRead.content, "html.parser"))[1:]
         content = remove(content)
         nonewline = str(content)
         content = nonewline.replace(' ', "")
