@@ -1,8 +1,14 @@
 import urllib.request as urlr
 from bs4 import BeautifulSoup
 from lst import containlst
+from requests import get
+
+headers = {
+	'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4446.0 Safari/537.36'
+}
+
 def search1(url, search):
-        toRead = urlr.urlopen(url)
+        toRead = get(url, headers=headers)
         content = str(toRead.read())[1:]
         content = remove(content)
         nonewline = str(content)
@@ -55,9 +61,9 @@ def crawl(lst):
     savelst = lst
     depth = 1
     for i in savelst:
-        print(i)
-        toRead = urlr.urlopen(i)
-        content = BeautifulSoup(toRead, "html.parser")
+        print("[i]" + i)
+        mush = get(i, headers=headers)
+        content = BeautifulSoup(mush.content, "html.parser")
         while(depth < 10):
             for link in extract(content, i):
                 if(link not in savelst):
