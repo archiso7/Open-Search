@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 from lst import containlst
 from requests import get
 
+containlst = []
 headers = {
 	'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4446.0 Safari/537.36'
 }

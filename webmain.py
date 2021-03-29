@@ -1,6 +1,6 @@
 from Fun import search1
 from Fun import crawl
-from lst import containlst
+from Fun import containlst
 import urllib.request as urlr
 search = input("Search:\n")
 base_urls = ['https://en.wikipedia.org/wiki/Main_Page']
