@@ -60,7 +60,7 @@ def crawl(lst):
     savelst = lst
     depth = 1
     for i in savelst:
-        print("[i]" + i)
+        print(i)
         mush = get(i, headers=headers)
         content = BeautifulSoup(mush.content, "html.parser")
         while(depth < 10):
