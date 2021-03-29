@@ -1,12 +1,14 @@
+#imports for scraping websites
 from bs4 import BeautifulSoup
-from lst import containlst
 from requests import get
 
+#define some variables
 containlst = []
 headers = {
 	'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4446.0 Safari/537.36'
 }
 
+#search for query
 def search1(url, search):
         toRead = get(url, headers=headers)
         content = str(BeautifulSoup(toRead.content, "html.parser"))[1:]
@@ -20,6 +22,7 @@ def search1(url, search):
         containlst.append(relevance)
         print(containlst)
 
+#remove html tags
 def remove(test_str):
     ret = ''
     skip1c = 0
@@ -32,6 +35,7 @@ def remove(test_str):
             ret += i
     return ret
 
+#take urls from websites
 def extract(soup, base_url):
     outlst = []
     for link in soup.findAll('a'):
@@ -50,6 +54,7 @@ def extract(soup, base_url):
                 outlst.append(url)
     return outlst
 
+#find the nth term in a string or list
 def findnth(haystack, needle, n):
     start = haystack.find(needle)
     while start >= 0 and n > 1:
@@ -57,6 +62,7 @@ def findnth(haystack, needle, n):
         n -= 1
     return start
 
+#scrape websites for urls
 def crawl(lst):
     savelst = lst
     depth = 1
