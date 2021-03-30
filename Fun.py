@@ -75,5 +75,5 @@ def crawl(lst):
                 if(link not in savelst):
                     print(link)
                     savelst.append(link)
-                depth += 1
+            depth += 1
     return savelst
