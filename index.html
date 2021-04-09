@@ -8,5 +8,16 @@
         <div id="wrapper">
             <h1>Open-Search</h1>
             <input id="input" placeholder="Search Open-Search">
+        </div>
+
+        <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script>
+            function goPython(){
+                $.ajax({
+                    url: "webmain.py",
+                    context: document.body
+                });
+            }
+        </script>
     </body>
 </html>

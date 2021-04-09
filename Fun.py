@@ -1,7 +1,7 @@
 #imports for scraping websites
 from bs4 import BeautifulSoup
 from requests import get
-
+import requests
 #define some variables
 containlst = []
 headers = {
@@ -10,17 +10,32 @@ headers = {
 
 #search for query
 def search1(url, search):
-        toRead = get(url, headers=headers)
-        content = str(BeautifulSoup(toRead.content, "html.parser"))[1:]
-        content = remove(content)
-        nonewline = str(content)
-        content = nonewline.replace(' ', "")
-        searchlst = search.split()
-        relevance = 0
-        for query in searchlst:
-            relevance += content.count(query)
-        containlst.append(relevance)
-        print(containlst)
+    try:
+        toRead = get(url, headers=headers,timeout=30)
+    except requests.ConnectionError as e:
+        print("OOPS!! Connection Error. Make sure you are connected to Internet. Technical Details given below.\n")
+        print(str(e))            
+    except requests.Timeout as e:
+        print("OOPS!! Timeout Error")
+        print(str(e))
+    except requests.RequestException as e:
+        print("OOPS!! General Error")
+        print(str(e))
+    except KeyboardInterrupt:
+        print("Someone closed the program")
+    toRead = get(url, headers=headers)
+    content = str(BeautifulSoup(toRead.content, "html.parser"))[1:]
+    content = remove(content)
+    nonewline = str(content)
+    content = nonewline.replace(' ', "")
+    searchlst = search.split()
+    contentlst = content.split()
+    relevance = 0
+    relevance += contentlst.count(search) * 5
+    for query in searchlst:
+        relevance += contentlst.count(query)
+    containlst.append(relevance)
+    print(containlst)
 
 #remove html tags
 def remove(test_str):
@@ -40,7 +55,7 @@ def extract(soup, base_url):
     outlst = []
     for link in soup.findAll('a'):
         url = str(link.get('href'))
-        if(url not in outlst):
+        if(url not in outlst) and (not url.endswith(".webm")) and (not url.endswith(".ogv")) and (not url.endswith(".pdf")) and (not url.endswith(".png")):
             if(url.startswith("http")):
                 print(url)
                 outlst.append(url)
@@ -50,6 +65,16 @@ def extract(soup, base_url):
                 outlst.append(url)
             elif(url.startswith("/")):
                 url = base_url[:findnth(base_url, "/", 3)] + url
+                print(url)
+                outlst.append(url)
+            elif(url.endswith(".html") or url.endswith(".php") or url.endswith(".js") or url.endswith(".cs")):
+                if(base_url.count("/") > 2):
+                    url = base_url[:findnth(base_url, "/", 3)] + "/" + url
+                else:
+                    if(base_url.endswith("/")):
+                        url = base_url + url
+                    else:
+                        url = base_url + "/" + url
                 print(url)
                 outlst.append(url)
     return outlst
@@ -68,12 +93,31 @@ def crawl(lst):
     depth = 1
     for i in savelst:
         print(i)
-        mush = get(i, headers=headers)
+        try:
+            mush = get(i, headers=headers,timeout=30)
+        except requests.ConnectionError as e:
+            print("OOPS!! Connection Error. Make sure you are connected to Internet. Technical Details given below.\n")
+            print(str(e))            
+            continue
+        except requests.Timeout as e:
+            print("OOPS!! Timeout Error")
+            print(str(e))
+            continue
+        except requests.RequestException as e:
+            print("OOPS!! General Error")
+            print(str(e))
+            continue
+        except KeyboardInterrupt:
+            print("Someone closed the program")
         content = BeautifulSoup(mush.content, "html.parser")
-        while(depth < 10):
+        if(depth < 10):
             for link in extract(content, i):
                 if(link not in savelst):
-                    print(link)
+                    print("[" + str(depth) + "]" + link)
                     savelst.append(link)
-            depth += 1
+                    print("[lst]" + str(savelst))
+                    f = open("sites.txt", "w")
+                    f.write(str(savelst))
+                    f.close()
+        depth += 1
     return savelst
