@@ -88,9 +88,8 @@ def findnth(haystack, needle, n):
     return start
 
 #scrape websites for urls
-def crawl(lst):
+def crawl(lst, numurls):
     savelst = lst
-    depth = 1
     for i in savelst:
         print(i)
         try:
@@ -110,14 +109,14 @@ def crawl(lst):
         except KeyboardInterrupt:
             print("Someone closed the program")
         content = BeautifulSoup(mush.content, "html.parser")
-        if(depth < 10):
-            for link in extract(content, i):
+        for link in extract(content, i):
+            if(numurls > 0):
                 if(link not in savelst):
-                    print("[" + str(depth) + "]" + link)
+                    print("[" + str(numurls) + "]" + link)
                     savelst.append(link)
                     print("[lst]" + str(savelst))
                     f = open("sites.txt", "w")
                     f.write(str(savelst))
                     f.close()
-        depth += 1
+                numurls -= 1
     return savelst
