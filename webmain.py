@@ -1,7 +1,6 @@
 #imports
 from Fun import search1
 from Fun import containlst
-from json import loads
 
 #define list
 outurls = []
