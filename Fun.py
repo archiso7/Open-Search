@@ -2,6 +2,7 @@
 from bs4 import BeautifulSoup
 from requests import get
 import requests
+
 #define some variables
 containlst = []
 headers = {

@@ -10,7 +10,6 @@ else:
     base_urls = urls
 
 #ask for number of urls to search
-
 numurls = input("How many more urls would you like to find? ")
 
 #scrape for urls
