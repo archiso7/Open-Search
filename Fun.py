@@ -111,13 +111,16 @@ def crawl(lst, numurls):
             print("Someone closed the program")
         content = BeautifulSoup(mush.content, "html.parser")
         for link in extract(content, i):
-            if(numurls > 0):
-                if(link not in savelst):
-                    print("[" + str(numurls) + "]" + link)
-                    savelst.append(link)
-                    print("[lst]" + str(savelst))
-                    f = open("sites.txt", "w")
-                    f.write(str(savelst))
-                    f.close()
+            if(link not in savelst):
+                print("[" + str(numurls) + "]" + link)
+                savelst.append(link)
+                print("[lst]" + str(savelst))
+                f = open("sites.txt", "w")
+                f.write(str(savelst))
+                f.close()
                 numurls -= 1
+                if(numurls <= 0):
+                    break
+        if(numurls <= 0):
+            break
     return savelst
