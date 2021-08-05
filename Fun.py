@@ -11,6 +11,7 @@ headers = {
 
 #search for query
 def search1(url, search):
+    global containlst
     try:
         toRead = get(url, headers=headers,timeout=30)
     except requests.ConnectionError as e:
@@ -30,11 +31,10 @@ def search1(url, search):
     nonewline = str(content)
     content = nonewline.replace(' ', "")
     searchlst = search.split()
-    contentlst = content.split()
     relevance = 0
-    relevance += contentlst.count(search) * 5
+    relevance += content.count(search) * 5
     for query in searchlst:
-        relevance += contentlst.count(query)
+        relevance += content.count(query)
     containlst.append(relevance)
     print(containlst)
 
